@@ -5,10 +5,8 @@ contains
 
   ! Create a square mesh, with the given left and right endpoints and the number of nodes.
   subroutine square_mesh(left, right, np, points)
-    ! Left endpoint
-    real, intent(in) :: left
-    ! Right endpoint
-    real, intent(in) :: right
+    ! Left and right endpoints
+    real, intent(in) :: left, right
     ! Number of points
     integer, intent(in) :: np
     ! Points array

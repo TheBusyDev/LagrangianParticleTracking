@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(LPT_Project Fortran)
+project(LPT Fortran)
 
 # Set the Fortran Standard
 set(CMAKE_Fortran_STANDARD 2003)

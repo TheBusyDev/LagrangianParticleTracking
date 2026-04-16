@@ -67,7 +67,6 @@ contains
 
     ! Close the file
     close(u_file)
-
   end subroutine write_csv
 
 end module IO
