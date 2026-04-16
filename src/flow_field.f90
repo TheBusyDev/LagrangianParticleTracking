@@ -1,51 +1,50 @@
 module FlowField
+  use Vector, only: VectorType
+
   implicit none
 
-  ! This defines the TEMPLATE for any velocity field function
+  ! This defines the template for any velocity field function
   abstract interface
-    function flow_field_interface(x) result(v)
+    pure function flow_field_template(position) result(velocity)
+      import VectorType
       ! Input: Position
-      real, intent(in) :: x(2)
+      type(VectorType), intent(in) :: position
       ! Output: Velocity
-      real :: v(2)
-    end function flow_field_interface
+      type(VectorType) :: velocity
+    end function flow_field_template
   end interface
 
 contains
 
-  ! Evaluate the flow field and save it into an array
+  ! Evaluate the flow field at the selected points.
   function evaluate(flow_field, points) result(velocity)
     ! Flow field function
-    procedure(flow_field_interface) :: flow_field
-    ! Mesh points
-    real, allocatable, intent(in) :: points(:, :, :)
-    ! Flow field evaluation
-    real, allocatable :: velocity(:, :, :)
-    ! Counters
-    integer i, j
-    ! Size
-    integer nx, ny
+    procedure(flow_field_template) :: flow_field
+    ! Array of points
+    type(VectorType), allocatable, intent(in) :: points(:)
+    ! Velocity field
+    type(VectorType), allocatable :: velocity(:)
+    ! Counter
+    integer i
 
-    nx = size(points, 2)
-    ny = size(points, 3)
+    allocate(velocity(size(points)))
 
-    allocate(velocity(2, nx, ny))
-
-    do j = 1, ny
-      do i = 1, nx
-        velocity(:, i, j) = flow_field(points(:, i, j))
-      end do
+    do i = 1, size(points)
+      velocity(i) = flow_field(points(i))
     end do
   end function evaluate
 
 
-  ! A simple vortex
-  function vortex(x) result(v)
-    real, intent(in) :: x(2)
-    real :: v(2)
+  ! 2D vortex
+  pure function vortex(position) result(velocity)
+    ! Input: Position
+    type(VectorType), intent(in) :: position
+    ! Output: Velocity
+    type(VectorType) :: velocity
 
-    v(1) = -x(2) ! Velocity in x is -y
-    v(2) = +x(1) ! Velocity in y is +x
+    velocity%x = -position%y ! Velocity in x is -y
+    velocity%y = +position%x ! Velocity in y is +x
+    velocity%z = 0
   end function vortex
 
 end module FlowField

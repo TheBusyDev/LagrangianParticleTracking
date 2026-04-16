@@ -2,13 +2,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 data = np.loadtxt("velocity.csv", delimiter=",")
-points_x = data[:, 0]
-points_y = data[:, 1]
-vx = data[:, 2]
-vy = data[:, 3]
+# Points
+px = data[:, 0]
+py = data[:, 1]
+pz = data[:, 2]
+# Velocity
+vx = data[:, 3]
+vy = data[:, 4]
+vz = data[:, 5]
 
 plt.figure()
-plt.quiver(points_x, points_y, vx, vy, np.hypot(vx, vy), cmap='jet')
+plt.quiver(px, py, vx, vy, np.hypot(vx, vy), cmap='jet')
 plt.colorbar()
 plt.tight_layout()
 plt.show()
