@@ -17,5 +17,5 @@ add_executable(main ${SOURCES})
 # Add plot target
 add_custom_target(
   plot
-  COMMAND python3 "${CMAKE_SOURCE_DIR}/plot.py"
+  COMMAND python3 "${CMAKE_SOURCE_DIR}/scripts/plot.py"
   WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
