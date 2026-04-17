@@ -1,38 +1,43 @@
-module Mesh
-  use Vector, only: VectorType
+module MeshModule
+  use VectorModule, only: VectorType
 
   implicit none
+
+  ! Array of mesh points
+  type, extends(VectorType) :: MeshType
+  end type MeshType
 
 contains
 
   ! Create a square mesh, with the given left and right endpoints and the number of nodes.
   ! Points are saved with a column-major ordering.
-  subroutine square_mesh(left, right, np, points)
+  subroutine init_square_mesh(left, right, n_points, mesh)
     ! Left and right endpoints
     real, intent(in) :: left, right
     ! Number of points for each side of the square domain
-    integer, intent(in) :: np
+    integer, intent(in) :: n_points
     ! Array of points
-    type(VectorType), allocatable, intent(out) :: points(:)
+    type(MeshType), intent(out) :: mesh
     ! Counters
     integer :: i, j
-    ! Space discretization
-    real :: dx
+    ! Array of coordinates
+    real :: coord(n_points)
 
-    ! Allocate points array
-    allocate(points(np * np))
+    ! Initialize mesh
+    call mesh%init(n_points * n_points)
 
     ! Define coordinate array
-    dx = (right - left) / (np - 1)
+    coord = [(left + i * (right - left) / (n_points - 1), i = 0, n_points - 1)]
 
     ! Initialize array of points (exploit column-major ordering)
-    do j = 1, np
-      do i = 1, np
-        points((j - 1) * np + i)%x = left + (i - 1) * dx
-        points((j - 1) * np + i)%y = left + (j - 1) * dx
-        points((j - 1) * np + i)%z = 0
+    do j = 1, n_points
+      do i = 1, n_points
+        mesh%x((j - 1) * n_points + i) = coord(i)
+        mesh%y((j - 1) * n_points + i) = coord(j)
       end do
     end do
-  end subroutine square_mesh
 
-end module Mesh
+    mesh%z = 0.0
+  end subroutine init_square_mesh
+
+end module MeshModule

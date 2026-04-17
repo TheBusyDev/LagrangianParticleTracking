@@ -1,50 +1,39 @@
-module FlowField
-  use Vector, only: VectorType
+module FlowFieldModule
+  use VectorModule, only: VectorType
+  use MeshModule, only: MeshType
 
   implicit none
 
-  ! This defines the template for any velocity field function
+  ! Flow field
+  type, extends(VectorType) :: FlowFieldType
+  end type FlowFieldType
+
+
+  ! Flow field function
   abstract interface
-    pure function flow_field_template(position) result(velocity)
-      import VectorType
-      ! Input: Position
-      type(VectorType), intent(in) :: position
-      ! Output: Velocity
-      type(VectorType) :: velocity
+    function flow_field_template(mesh) result(velocity)
+      import MeshType, FlowFieldType
+      ! Position
+      type(MeshType), intent(in) :: mesh
+      ! Velocity
+      type(FlowFieldType) :: velocity
     end function flow_field_template
   end interface
 
 contains
 
-  ! Evaluate the flow field at the selected points.
-  function evaluate(flow_field, points) result(velocity)
-    ! Flow field function
-    procedure(flow_field_template) :: flow_field
-    ! Array of points
-    type(VectorType), allocatable, intent(in) :: points(:)
-    ! Velocity field
-    type(VectorType), allocatable :: velocity(:)
-    ! Counter
-    integer i
-
-    allocate(velocity(size(points)))
-
-    do i = 1, size(points)
-      velocity(i) = flow_field(points(i))
-    end do
-  end function evaluate
-
-
   ! 2D vortex
-  pure function vortex(position) result(velocity)
-    ! Input: Position
-    type(VectorType), intent(in) :: position
-    ! Output: Velocity
-    type(VectorType) :: velocity
+  function vortex(mesh) result(velocity)
+    ! Position
+    type(MeshType), intent(in) :: mesh
+    ! Velocity
+    type(FlowFieldType) :: velocity
 
-    velocity%x = -position%y ! Velocity in x is -y
-    velocity%y = +position%x ! Velocity in y is +x
-    velocity%z = 0
+    call velocity%init(mesh%n)
+
+    velocity%x = -mesh%y ! Velocity in x is -y
+    velocity%y = +mesh%x ! Velocity in y is +x
+    velocity%z = 0.0
   end function vortex
 
-end module FlowField
+end module FlowFieldModule
