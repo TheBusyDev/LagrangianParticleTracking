@@ -1,4 +1,5 @@
 module FlowFieldModule
+  use Kinds
   use VectorModule, only: VectorType
 
   implicit none
@@ -12,7 +13,7 @@ contains
   ! 2D vortex
   subroutine vortex(time, points, flow_field)
     ! Time
-    real, intent(in) :: time
+    real(wp), intent(in) :: time
     ! Position
     class(VectorType), intent(in) :: points
     ! Flow field
@@ -27,7 +28,7 @@ contains
 
     flow_field%x = -points%y ! Velocity in x is -y
     flow_field%y = +points%x ! Velocity in y is +x
-    flow_field%z = 0.0
+    flow_field%z = 0.0_wp
   end subroutine vortex
 
 end module FlowFieldModule

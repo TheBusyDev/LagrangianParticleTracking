@@ -1,4 +1,5 @@
 module ParticlesModule
+  use Kinds
   use VectorModule, only: VectorType
 
   implicit none
@@ -22,7 +23,7 @@ module ParticlesModule
   ! Initialize position of the particles randomly on a 2D rectangular domain
   subroutine init_random_rectangle(left, right, bottom, top, n_particles, particles)
     ! Left, right, bottom and top endpoints
-    real, intent(in) :: left, right, bottom, top
+    real(wp), intent(in) :: left, right, bottom, top
     ! Number of particles
     integer, intent(in) :: n_particles
     ! Position of the particles
@@ -39,14 +40,14 @@ module ParticlesModule
 
     particles%x = left + (right - left) * particles%x ! Rescale along x
     particles%y = bottom + (top - bottom) * particles%y ! Rescale along y
-    particles%z = 0.0
+    particles%z = 0.0_wp
   end subroutine init_random_rectangle
 
 
   ! Initialize position of the particles randomly on a 2D square domain
   subroutine init_random_square(left, right, n_particles, particles)
     ! Left and right endpoints
-    real, intent(in) :: left, right
+    real(wp), intent(in) :: left, right
     ! Number of particles
     integer, intent(in) :: n_particles
     ! Position of the particles

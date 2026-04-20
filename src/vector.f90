@@ -1,4 +1,6 @@
 module VectorModule
+  use Kinds
+
   implicit none
 
   ! Array of 3D vectors, with x, y, z components.
@@ -6,7 +8,7 @@ module VectorModule
     ! Number of vectors stored in this class
     integer :: n = 0
     ! Components of the vector
-    real, allocatable :: x(:), y(:), z(:)
+    real(wp), allocatable :: x(:), y(:), z(:)
 
   contains
     ! Initialization method
@@ -50,9 +52,9 @@ contains
     allocate(this%z(n))
   end if
 
-    this%x = 0.0
-    this%y = 0.0
-    this%z = 0.0
+    this%x = 0.0_wp
+    this%y = 0.0_wp
+    this%z = 0.0_wp
   end subroutine init_vector
 
 
@@ -62,7 +64,7 @@ contains
     ! The vector
     class(VectorType), intent(inout) :: this
     ! The scalar multiplying factor
-    real, intent(in) :: s
+    real(wp), intent(in) :: s
     ! The other vector
     class(VectorType), intent(in) :: v
 

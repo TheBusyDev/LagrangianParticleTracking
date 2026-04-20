@@ -1,4 +1,5 @@
 program main
+  use Kinds
   use MeshModule, only: MeshType, init_square_mesh
   use FlowFieldModule, only: FlowFieldType, vortex
   use ParticlesModule, only: ParticlesType, init_random_2d
@@ -7,21 +8,21 @@ program main
   implicit none
 
   ! Left and right endpoints of the square domain
-  real, parameter :: left = -1.0, right = 1.0
+  real(wp), parameter :: left = -1.0_wp, right = 1.0_wp
   ! Number of points for each side of the square domain
   integer, parameter :: n_points = 10
   ! Number of particles
   integer, parameter :: n_particles = 1000
   ! The initial time
-  real, parameter :: initial_time = 0.0
+  real(wp), parameter :: initial_time = 0.0_wp
   ! The final time
-  real, parameter :: final_time = 10
+  real(wp), parameter :: final_time = 1.0_wp
   ! The time step
-  real, parameter :: delta_time = 0.01
+  real(wp), parameter :: delta_time = 0.01_wp
   ! The current time
-  real :: time = initial_time
+  real(wp) :: time = initial_time
   ! The old time
-  real :: old_time = initial_time
+  real(wp) :: old_time = initial_time
   ! The number of the time step
   integer :: timestep = 0
   ! Flow field function
@@ -54,7 +55,7 @@ program main
   call particles%write_to_csv("particles", ["x", "y", "z"], timestep)
 
   ! Time loop
-  do while (time < (final_time - 0.5 * delta_time))
+  do while (time < (final_time - 0.5_wp * delta_time))
     ! Update time
     old_time = time
     time = time + delta_time

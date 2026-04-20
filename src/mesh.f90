@@ -1,4 +1,5 @@
 module MeshModule
+  use Kinds
   use VectorModule, only: VectorType
 
   implicit none
@@ -13,7 +14,7 @@ contains
   ! (points are saved with a column-major ordering)
   subroutine init_square_mesh(left, right, n_points, mesh)
     ! Left and right endpoints
-    real, intent(in) :: left, right
+    real(wp), intent(in) :: left, right
     ! Number of points for each side of the square domain
     integer, intent(in) :: n_points
     ! Array of points
@@ -21,7 +22,7 @@ contains
     ! Counters
     integer :: i, j
     ! Array of coordinates
-    real :: coord(n_points)
+    real(wp) :: coord(n_points)
 
     ! Initialize mesh
     call mesh%init(n_points * n_points)
@@ -37,7 +38,7 @@ contains
       end do
     end do
 
-    mesh%z = 0.0
+    mesh%z = 0.0_wp
   end subroutine init_square_mesh
 
 end module MeshModule

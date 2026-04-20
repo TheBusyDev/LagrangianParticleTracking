@@ -1,4 +1,5 @@
 module RungeKuttaModule
+  use Kinds
   use VectorModule, only: VectorType
 
   implicit none
@@ -13,9 +14,9 @@ module RungeKuttaModule
     ! The number of stages
     integer, private :: n_stages = 0
     ! Butcher tableau coefficients
-    real, allocatable, private :: a(:, :), b(:), c(:)
+    real(wp), allocatable, private :: a(:, :), b(:), c(:)
     ! The time used for the intermediate evaluations
-    real, private :: t_tmp
+    real(wp), private :: t_tmp
     ! The solution used for the intermediate evaluations
     type(VectorType), private :: x_tmp
     ! Intermediate evaluations
@@ -34,9 +35,9 @@ module RungeKuttaModule
   ! Forcing term function for Runge-Kutta schemes
   abstract interface
     subroutine f_template(t, x, f)
-      import VectorType
+      import VectorType, wp
       ! The time
-      real, intent(in) :: t
+      real(wp), intent(in) :: t
       ! The variable to be updated
       class(VectorType), intent(in) :: x
       ! The evaluation of the forcing term
@@ -64,7 +65,7 @@ contains
     select case (scheme)
     case (FORWARD_EULER)
       call this%init_butcher(n_stages=1)
-      this%b(1) = 1.0
+      this%b(1) = 1.0_wp
 
     case default
       print *, "ERROR: Time-stepping method not implemented."
@@ -97,9 +98,9 @@ contains
     allocate(this%b(n_stages))
     allocate(this%c(n_stages))
 
-    this%a = 0.0
-    this%b = 0.0
-    this%c = 0.0
+    this%a = 0.0_wp
+    this%b = 0.0_wp
+    this%c = 0.0_wp
   end subroutine init_butcher_rk
 
 
@@ -110,9 +111,9 @@ contains
     ! The variable to be updated
     class(VectorType), intent(inout) :: x
     ! The previous time step
-    real, intent(in) :: t_old
+    real(wp), intent(in) :: t_old
     ! The size of the time step
-    real, intent(in) :: delta_t
+    real(wp), intent(in) :: delta_t
     ! The forcing term function
     procedure(f_template) :: f_function
     ! Counters
