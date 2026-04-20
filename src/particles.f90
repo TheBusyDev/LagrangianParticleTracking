@@ -26,7 +26,7 @@ module ParticlesModule
     ! Number of particles
     integer, intent(in) :: n_particles
     ! Position of the particles
-    type(ParticlesType), intent(out) :: particles
+    class(ParticlesType), intent(out) :: particles
 
     ! Initialize particles
     call particles%init(n_particles)
@@ -50,7 +50,7 @@ module ParticlesModule
     ! Number of particles
     integer, intent(in) :: n_particles
     ! Position of the particles
-    type(ParticlesType), intent(out) :: particles
+    class(ParticlesType), intent(out) :: particles
 
     call init_random_rectangle(left, right, left, right, n_particles, particles)
   end subroutine init_random_square

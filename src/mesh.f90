@@ -17,7 +17,7 @@ contains
     ! Number of points for each side of the square domain
     integer, intent(in) :: n_points
     ! Array of points
-    type(MeshType), intent(out) :: mesh
+    class(MeshType), intent(out) :: mesh
     ! Counters
     integer :: i, j
     ! Array of coordinates

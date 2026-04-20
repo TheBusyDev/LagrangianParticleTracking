@@ -2,7 +2,7 @@ program main
   use MeshModule, only: MeshType, init_square_mesh
   use FlowFieldModule, only: FlowFieldType, flow_field_template, vortex
   use ParticlesModule, only: ParticlesType, init_random_2d
-  use RungeKuttaModule, only: ExplicitRungeKuttaType
+  use RungeKuttaModule, only: ExplicitRungeKuttaType, FORWARD_EULER
 
   implicit none
 
@@ -12,6 +12,10 @@ program main
   integer, parameter :: n_points = 10
   ! Number of particles
   integer, parameter :: n_particles = 1000
+  ! The time
+  real :: time = 0.0
+  ! The time step
+  integer :: timestep = 0
   ! Flow field function
   procedure(flow_field_template), pointer :: flow_field_fun => vortex
 
@@ -21,17 +25,22 @@ program main
   type(FlowFieldType) :: flow_field
   ! Position of particles
   type(ParticlesType) :: particles
+  ! Explicit RK method
+  type(ExplicitRungeKuttaType) :: explicit_rk
 
   ! Initialize mesh and position of particles
   call init_square_mesh(left, right, n_points, mesh)
   call init_random_2d(left, right, n_particles, particles)
 
   ! Evaluate flow field
-  call flow_field_fun(mesh, flow_field)
+  call flow_field_fun(time, mesh, flow_field)
+
+  ! Initialize RK scheme
+  call explicit_rk%init(FORWARD_EULER, n_particles)
 
   ! Write mesh points, flow field and particles
   call mesh%write_to_csv("mesh", ["x", "y", "z"])
   call flow_field%write_to_csv("flow_field", ["vx", "vy", "vz"])
-  call particles%write_to_csv("particles", ["x", "y", "z"], timestep=0)
+  call particles%write_to_csv("particles", ["x", "y", "z"], timestep)
 
 end program main

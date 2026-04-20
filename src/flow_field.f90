@@ -1,6 +1,5 @@
 module FlowFieldModule
   use VectorModule, only: VectorType
-  use MeshModule, only: MeshType
 
   implicit none
 
@@ -11,29 +10,37 @@ module FlowFieldModule
 
   ! Flow field function
   abstract interface
-    subroutine flow_field_template(mesh, flow_field)
-      import MeshType, FlowFieldType
+    subroutine flow_field_template(time, points, flow_field)
+      import VectorType, FlowFieldType
+      ! Time
+      real, intent(in) :: time
       ! Position
-      type(MeshType), intent(in) :: mesh
+      class(VectorType), intent(in) :: points
       ! Flow field
-      type(FlowFieldType), intent(out) :: flow_field
+      class(FlowFieldType), intent(out) :: flow_field
     end subroutine flow_field_template
   end interface
 
 contains
 
   ! 2D vortex
-  subroutine vortex(mesh, flow_field)
+  subroutine vortex(time, points, flow_field)
+    ! Time
+    real, intent(in) :: time
     ! Position
-    type(MeshType), intent(in) :: mesh
+    class(VectorType), intent(in) :: points
     ! Flow field
-    type(FlowFieldType), intent(out) :: flow_field
+    class(FlowFieldType), intent(out) :: flow_field
+
+    ! Silence compiler warnings
+    associate(dummy => time)
+    end associate
 
     ! Initialize flow field
-    call flow_field%init(mesh%n)
+    call flow_field%init(points%n)
 
-    flow_field%x = -mesh%y ! Velocity in x is -y
-    flow_field%y = +mesh%x ! Velocity in y is +x
+    flow_field%x = -points%y ! Velocity in x is -y
+    flow_field%y = +points%x ! Velocity in y is +x
     flow_field%z = 0.0
   end subroutine vortex
 

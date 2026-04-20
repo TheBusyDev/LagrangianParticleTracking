@@ -1,4 +1,6 @@
 module RungeKuttaModule
+  use VectorModule, only: VectorType
+
   implicit none
 
   enum, bind(c)
@@ -15,9 +17,9 @@ module RungeKuttaModule
     ! The time used for the intermediate evaluations
     real, private :: t_tmp
     ! The solution used for the intermediate evaluations
-    real, allocatable, private :: x_tmp(:)
+    type(VectorType), private :: x_tmp
     ! Intermediate evaluations
-    real, allocatable, private :: k(:, :)
+    type(VectorType), allocatable, private :: k(:)
 
   contains
     ! Initialization method
@@ -32,12 +34,13 @@ module RungeKuttaModule
   ! Forcing term function for Runge-Kutta schemes
   abstract interface
     subroutine f_template(t, x, f)
+      import VectorType
       ! The time
       real, intent(in) :: t
       ! The variable to be updated
-      real, intent(in) :: x(:)
+      class(VectorType), intent(in) :: x
       ! The evaluation of the forcing term
-      real, intent(out) :: f(:)
+      class(VectorType), intent(out) :: f
     end subroutine f_template
   end interface
 
@@ -54,6 +57,8 @@ contains
     integer, intent(in) :: scheme
     ! The problem size, used to initialize the class members
     integer, intent(in) :: n
+    ! Counter
+    integer :: i
 
     ! Initialize Butcher tableau
     select case (scheme)
@@ -69,9 +74,13 @@ contains
     ! Transpose a for better performance with column-major ordering
     this%a = transpose(this%a)
 
-    ! Allocate variables used for the intermediate evaluations
-    allocate(this%x_tmp(n))
-    allocate(this%k(n, this%n_stages))
+    ! Initialize variables used for the intermediate evaluations
+    call this%x_tmp%init(n)
+    allocate(this%k(this%n_stages))
+
+    do i = 1, this%n_stages
+      call this%k(i)%init(n)
+    end do
   end subroutine init_rk
 
 
@@ -99,7 +108,7 @@ contains
     ! The RK class
     class(ExplicitRungeKuttaType), intent(inout) :: this
     ! The variable to be updated
-    real, intent(inout) :: x(:)
+    class(VectorType), intent(inout) :: x
     ! The previous time step
     real, intent(in) :: t_old
     ! The size of the time step
@@ -110,7 +119,7 @@ contains
     integer i, j
 
     ! First stage
-    call f_function(t_old, x, this%k(:, 1))
+    call f_function(t_old, x, this%k(1))
 
     ! Other stages
     do i = 2, this%n_stages
@@ -118,15 +127,15 @@ contains
       this%x_tmp = x
 
       do j = 1, i - 1
-        this%x_tmp = this%x_tmp + (delta_t * this%a(j, i)) * this%k(:, j)
+        call this%x_tmp%multiply_add(delta_t * this%a(j, i), this%k(j))
       end do
 
-      call f_function(this%t_tmp, this%x_tmp, this%k(:, i))
+      call f_function(this%t_tmp, this%x_tmp, this%k(i))
     end do
 
     ! Update the variable
     do i = 1, this%n_stages
-      x = x + (delta_t * this%b(i)) * this%k(:, i)
+      call x%multiply_add(delta_t * this%b(i), this%k(i))
     end do
   end subroutine update_rk
 
