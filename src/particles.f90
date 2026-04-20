@@ -11,8 +11,9 @@ module ParticlesModule
   ! Initialize position of the particles randomly on a 2D domain (either rectangular or square)
   ! (function overloading)
   interface init_random_2d
-    module procedure init_random_rectangle, init_random_square
+    procedure init_random_rectangle, init_random_square
   end interface init_random_2d
+
 
   private :: init_random_rectangle, init_random_square
 

@@ -9,8 +9,8 @@ module MeshModule
 
 contains
 
-  ! Create a square mesh, with the given left and right endpoints and the number of nodes.
-  ! Points are saved with a column-major ordering.
+  ! Create a square mesh, with the given left and right endpoints and the number of nodes
+  ! (points are saved with a column-major ordering)
   subroutine init_square_mesh(left, right, n_points, mesh)
     ! Left and right endpoints
     real, intent(in) :: left, right

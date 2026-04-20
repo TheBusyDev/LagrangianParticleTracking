@@ -27,11 +27,25 @@ contains
     ! Number of vectors
     integer, intent(in) :: n
 
-    this%n = n
+    if (this%n .ne. n) then
+      this%n = n
+
+      if (allocated(this%x)) then
+        deallocate(this%x)
+      end if
+
+      if (allocated(this%y)) then
+        deallocate(this%y)
+      end if
+
+      if (allocated(this%z)) then
+        deallocate(this%z)
+      end if
 
     allocate(this%x(n))
     allocate(this%y(n))
     allocate(this%z(n))
+  end if
 
     this%x = 0.0
     this%y = 0.0
