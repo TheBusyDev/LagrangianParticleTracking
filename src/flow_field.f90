@@ -7,20 +7,6 @@ module FlowFieldModule
   type, extends(VectorType) :: FlowFieldType
   end type FlowFieldType
 
-
-  ! Flow field function
-  abstract interface
-    subroutine flow_field_template(time, points, flow_field)
-      import VectorType, FlowFieldType
-      ! Time
-      real, intent(in) :: time
-      ! Position
-      class(VectorType), intent(in) :: points
-      ! Flow field
-      class(FlowFieldType), intent(out) :: flow_field
-    end subroutine flow_field_template
-  end interface
-
 contains
 
   ! 2D vortex
@@ -30,7 +16,7 @@ contains
     ! Position
     class(VectorType), intent(in) :: points
     ! Flow field
-    class(FlowFieldType), intent(out) :: flow_field
+    class(VectorType), intent(out) :: flow_field
 
     ! Silence compiler warnings
     associate(dummy => time)
