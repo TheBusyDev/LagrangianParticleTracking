@@ -11,12 +11,15 @@ module VectorModule
   contains
     ! Initialization method
     procedure :: init => init_vector
+    ! Multiply-add operation, i.e. this = this + s * v
+    ! with s being a scalar and v another vector.
+    procedure :: multiply_add => multiply_add_vector
     ! Write vector to a .csv file
     procedure :: write_to_csv => write_vector_to_csv
   end type VectorType
 
 
-  private :: init_vector, write_vector_to_csv
+  private :: init_vector, multiply_add_vector, write_vector_to_csv
 
 contains
 
@@ -51,6 +54,22 @@ contains
     this%y = 0.0
     this%z = 0.0
   end subroutine init_vector
+
+
+  ! Multiply-add operation, i.e. this = this + s * v
+  ! with s being a scalar and v another vector.
+  subroutine multiply_add_vector(this, s, v)
+    ! The vector
+    class(VectorType), intent(inout) :: this
+    ! The scalar multiplying factor
+    real, intent(in) :: s
+    ! The other vector
+    class(VectorType), intent(in) :: v
+
+    this%x = this%x + s * v%x
+    this%y = this%y + s * v%y
+    this%z = this%z + s * v%z
+  end subroutine multiply_add_vector
 
 
   ! Write 3D vector to .csv file
