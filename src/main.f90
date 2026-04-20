@@ -3,7 +3,11 @@ program main
   use MeshModule, only: MeshType, init_square_mesh
   use FlowFieldModule, only: FlowFieldType, vortex
   use ParticlesModule, only: ParticlesType, init_random_circle, init_random_square
-  use RungeKuttaModule, only: ExplicitRungeKuttaType, f_template, FORWARD_EULER
+  use RungeKuttaModule, only: ExplicitRungeKuttaType, f_template, &
+                              FIRST_ORDER_FORWARD_EULER, &
+                              SECOND_ORDER_MIDPOINT, SECOND_ORDER_HEUN, &
+                              THIRD_ORDER_KUTTA, THIRD_ORDER_HEUN, &
+                              FOURTH_ORDER
 
   implicit none
 
@@ -18,9 +22,11 @@ program main
   ! The initial time
   real(wp), parameter :: initial_time = 0.0_wp
   ! The final time
-  real(wp), parameter :: final_time = 1.0_wp
+  real(wp), parameter :: final_time = 10_wp
   ! The time step
-  real(wp), parameter :: delta_time = 0.01_wp
+  real(wp), parameter :: delta_time = 0.1_wp
+  ! The time-stepping scheme
+  integer, parameter :: scheme = FOURTH_ORDER
   ! The current time
   real(wp) :: time = initial_time
   ! The old time
@@ -47,7 +53,7 @@ program main
   call init_random_circle(radius, n_particles, particles)
 
   ! Initialize RK scheme
-  call explicit_rk%init(FORWARD_EULER, n_particles)
+  call explicit_rk%init(scheme, n_particles)
 
   ! Evaluate flow field
   call flow_field_fun(time, mesh, flow_field)

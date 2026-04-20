@@ -5,7 +5,12 @@ module RungeKuttaModule
   implicit none
 
   enum, bind(c)
-    enumerator :: FORWARD_EULER
+    enumerator :: FIRST_ORDER_FORWARD_EULER
+    enumerator :: SECOND_ORDER_MIDPOINT
+    enumerator :: SECOND_ORDER_HEUN
+    enumerator :: THIRD_ORDER_KUTTA
+    enumerator :: THIRD_ORDER_HEUN
+    enumerator :: FOURTH_ORDER
   end enum
 
 
@@ -63,9 +68,48 @@ contains
 
     ! Initialize Butcher tableau
     select case (scheme)
-    case (FORWARD_EULER)
+    case (FIRST_ORDER_FORWARD_EULER)
       call this%init_butcher(n_stages=1)
       this%b(1) = 1.0_wp
+
+    case (SECOND_ORDER_MIDPOINT)
+      call this%init_butcher(n_stages=2)
+      this%a = reshape([0.0_wp, 0.0_wp, &
+                        0.5_wp, 0.0_wp], shape=shape(this%a), order=[2, 1])
+      this%b = [0.0_wp, 1.0_wp]
+      this%c = [0.0_wp, 0.5_wp]
+
+    case (SECOND_ORDER_HEUN)
+      call this%init_butcher(n_stages=2)
+      this%a = reshape([0.0_wp, 0.0_wp, &
+                        1.0_wp, 0.0_wp], shape=shape(this%a), order=[2, 1])
+      this%b = [0.0_wp, 0.5_wp]
+      this%c = [0.0_wp, 1.0_wp]
+
+    case (THIRD_ORDER_KUTTA)
+      call this%init_butcher(n_stages=3)
+      this%a = reshape([0.0_wp, 0.0_wp, 0.0_wp, &
+                        0.5_wp, 0.0_wp, 0.0_wp, &
+                        -1.0_wp, 2.0_wp, 0.0_wp], shape=shape(this%a), order=[2, 1])
+      this%b = [1.0_wp / 6, 2.0_wp / 3, 1.0_wp / 6]
+      this%c = [0.0_wp, 0.5_wp, 1.0_wp]
+
+    case (THIRD_ORDER_HEUN)
+      call this%init_butcher(n_stages=3)
+      this%a = reshape([0.0_wp, 0.0_wp, 0.0_wp, &
+                        1.0_wp / 3, 0.0_wp, 0.0_wp, &
+                        0.0_wp, 2.0_wp / 3, 0.0_wp], shape=shape(this%a), order=[2, 1])
+      this%b = [0.25_wp, 0.0_wp, 0.75_wp]
+      this%c = [0.0_wp, 1.0_wp / 3, 2.0_wp / 3]
+
+    case (FOURTH_ORDER)
+      call this%init_butcher(n_stages=4)
+      this%a = reshape([0.0_wp, 0.0_wp, 0.0_wp, 0.0_wp, &
+                        0.5_wp, 0.0_wp, 0.0_wp, 0.0_wp, &
+                        0.0_wp, 0.5_wp, 0.0_wp, 0.0_wp, &
+                        0.0_wp, 0.0_wp, 1.0_wp, 0.0_wp], shape=shape(this%a), order=[2, 1])
+      this%b = [1.0_wp / 6, 1.0_wp / 3, 1.0_wp / 3, 1.0_wp / 6]
+      this%c = [0.0_wp, 0.5_wp, 0.5_wp, 1.0_wp]
 
     case default
       print *, "ERROR: Time-stepping method not implemented."
