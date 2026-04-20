@@ -1,5 +1,5 @@
 module ParticlesModule
-  use Kinds
+  use Numbers
   use VectorModule, only: VectorType
 
   implicit none
@@ -8,17 +8,36 @@ module ParticlesModule
   type, extends(VectorType) :: ParticlesType
   end type ParticlesType
 
+contains
 
-  ! Initialize position of the particles randomly on a 2D domain (either rectangular or square)
-  ! (function overloading)
-  interface init_random_2d
-    procedure init_random_rectangle, init_random_square
-  end interface init_random_2d
+  ! Initialize position of the particles randomly on a 2D circular domain
+  subroutine init_random_circle(max_radius, n_particles, particles)
+    ! Maximum radius
+    real(wp), intent(in) :: max_radius
+    ! Number of particles
+    integer, intent(in) :: n_particles
+    ! Position of the particles
+    class(ParticlesType), intent(out) :: particles
+    ! Radial and angular position of the particles
+    real(wp) :: r(n_particles), theta(n_particles)
 
+    ! Initialize particles
+    call particles%init(n_particles)
 
-  private :: init_random_rectangle, init_random_square
+    ! Initialize the position randomly
+    call random_seed()
+    call random_number(r)
+    call random_number(theta)
 
-  contains
+    r = r * max_radius
+    theta = theta * (2.0_wp * PI)
+
+    ! Convert polar coordinates into cartesian coordinates
+    particles%x = r * cos(theta)
+    particles%y = r * sin(theta)
+    particles%z = 0.0_wp
+  end subroutine init_random_circle
+
 
   ! Initialize position of the particles randomly on a 2D rectangular domain
   subroutine init_random_rectangle(left, right, bottom, top, n_particles, particles)

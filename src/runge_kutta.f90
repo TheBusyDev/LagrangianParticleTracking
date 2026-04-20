@@ -1,5 +1,5 @@
 module RungeKuttaModule
-  use Kinds
+  use Numbers
   use VectorModule, only: VectorType
 
   implicit none

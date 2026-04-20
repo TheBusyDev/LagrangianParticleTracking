@@ -1,5 +1,5 @@
 module VectorModule
-  use Kinds
+  use Numbers
 
   implicit none
 

@@ -1,14 +1,16 @@
 program main
-  use Kinds
+  use Numbers
   use MeshModule, only: MeshType, init_square_mesh
   use FlowFieldModule, only: FlowFieldType, vortex
-  use ParticlesModule, only: ParticlesType, init_random_2d
+  use ParticlesModule, only: ParticlesType, init_random_circle, init_random_square
   use RungeKuttaModule, only: ExplicitRungeKuttaType, f_template, FORWARD_EULER
 
   implicit none
 
   ! Left and right endpoints of the square domain
   real(wp), parameter :: left = -1.0_wp, right = 1.0_wp
+  ! Radius used to initialize the particles on a circular domain
+  real(wp), parameter :: radius = (right - left) / 2.0_wp
   ! Number of points for each side of the square domain
   integer, parameter :: n_points = 10
   ! Number of particles
@@ -41,7 +43,8 @@ program main
 
   ! Initialize mesh and position of particles
   call init_square_mesh(left, right, n_points, mesh)
-  call init_random_2d(left, right, n_particles, particles)
+  ! call init_random_square(left, right, n_particles, particles)
+  call init_random_circle(radius, n_particles, particles)
 
   ! Initialize RK scheme
   call explicit_rk%init(FORWARD_EULER, n_particles)
