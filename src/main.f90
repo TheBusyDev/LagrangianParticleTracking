@@ -31,6 +31,10 @@ program main
   real(wp) :: old_time
   ! The number of the time step
   integer :: timestep
+  ! Number of command line arguments
+  integer :: n_args
+  ! Namelist filename
+  character(256) :: nml_filename
   ! Flow field function
   procedure(f_template), pointer :: flow_field_fun => vortex
 
@@ -43,9 +47,20 @@ program main
   ! Explicit RK method
   type(ExplicitRungeKuttaType) :: explicit_rk
 
+  ! Read the namelist filename from the command line
+  n_args = command_argument_count()
+
+  if (n_args == 0) then
+    print '(A)', "ERROR: you must specify the namelist filename in the arguments, e.g.:"
+    print '(A)', "       >>> ./main config.nml"
+    call exit(1)
+  end if
+
+  call get_command_argument(number=1, value=nml_filename)
+
   ! Read the variables from the namelist file
-  print '(A)', "Parsing the variables from config.nml" ! TODO: pass from command line
-  call parse_parameters("config.nml", &
+  print '(A)', "Parsing the variables from "//trim(nml_filename)//"..."
+  call parse_parameters(nml_filename, &
                         left, &
                         right, &
                         radius, &
