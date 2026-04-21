@@ -1,0 +1,29 @@
+! Namelist group defining useful constants
+&config
+  ! Left endpoint of the square domain
+  left = -1.0
+
+  ! Right endpoint of the square domain
+  right = 1.0
+
+  ! Radius used to initialize the particles on a circular domain
+  radius = 1.0
+
+  ! Number of points for each side of the square domain to evaluate the flow field
+  n_points = 10
+
+  ! Number of particles
+  n_particles = 1000
+
+  ! The initial time
+  initial_time = 0.0
+
+  ! The final time
+  final_time = 10.0
+
+  ! The time step
+  delta_time = 0.1
+
+  ! The time-stepping scheme
+  scheme_str = "FOURTH_ORDER"
+/
