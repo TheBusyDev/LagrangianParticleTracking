@@ -1,8 +1,9 @@
 program main
   use Numbers
-  use MeshModule, only: MeshType, init_square_mesh
-  use FlowFieldModule, only: FlowFieldType, vortex
-  use ParticlesModule, only: ParticlesType, init_random_circle, init_random_square
+  use VectorModule, only: VectorType
+  use MeshModule, only: init_square_mesh
+  use FlowFieldModule, only: vortex
+  use ParticlesModule, only: init_random_circle, init_random_square
   use RungeKuttaModule, only: ExplicitRungeKuttaType, f_template, &
                               FIRST_ORDER_FORWARD_EULER, &
                               SECOND_ORDER_MIDPOINT, SECOND_ORDER_HEUN, &
@@ -37,11 +38,11 @@ program main
   procedure(f_template), pointer :: flow_field_fun => vortex
 
   ! Array of mesh points
-  type(MeshType) :: mesh
+  type(VectorType) :: mesh
   ! Flow field evaluated at mesh points
-  type(FlowFieldType) :: flow_field
+  type(VectorType) :: flow_field
   ! Position of particles
-  type(ParticlesType) :: particles
+  type(VectorType) :: particles
   ! Explicit RK method
   type(ExplicitRungeKuttaType) :: explicit_rk
 
@@ -71,7 +72,7 @@ program main
     timestep = timestep + 1
     print '(A, F0.5, A, I6.6)', "Time: ", time, " at timestep: ", timestep
 
-    ! Update with explicit Runge-Kutta solver
+    ! Update with explicit RK scheme
     call explicit_rk%update(particles, old_time, delta_time, flow_field_fun)
 
     ! Evaluate flow field

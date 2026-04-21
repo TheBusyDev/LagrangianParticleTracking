@@ -4,10 +4,6 @@ module FlowFieldModule
 
   implicit none
 
-  ! Flow field
-  type, extends(VectorType) :: FlowFieldType
-  end type FlowFieldType
-
 contains
 
   ! 2D vortex

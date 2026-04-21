@@ -4,10 +4,6 @@ module MeshModule
 
   implicit none
 
-  ! Array of mesh points
-  type, extends(VectorType) :: MeshType
-  end type MeshType
-
 contains
 
   ! Create a square mesh, with the given left and right endpoints and the number of nodes
@@ -18,7 +14,7 @@ contains
     ! Number of points for each side of the square domain
     integer, intent(in) :: n_points
     ! Array of points
-    class(MeshType), intent(out) :: mesh
+    class(VectorType), intent(out) :: mesh
     ! Counters
     integer :: i, j
     ! Array of coordinates

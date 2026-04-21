@@ -4,10 +4,6 @@ module ParticlesModule
 
   implicit none
 
-  ! Position of the particles
-  type, extends(VectorType) :: ParticlesType
-  end type ParticlesType
-
 contains
 
   ! Initialize position of the particles randomly on a 2D circular domain
@@ -17,7 +13,7 @@ contains
     ! Number of particles
     integer, intent(in) :: n_particles
     ! Position of the particles
-    class(ParticlesType), intent(out) :: particles
+    class(VectorType), intent(out) :: particles
     ! Radial and angular position of the particles
     real(wp) :: r(n_particles), theta(n_particles)
 
@@ -46,7 +42,7 @@ contains
     ! Number of particles
     integer, intent(in) :: n_particles
     ! Position of the particles
-    class(ParticlesType), intent(out) :: particles
+    class(VectorType), intent(out) :: particles
 
     ! Initialize particles
     call particles%init(n_particles)
@@ -70,7 +66,7 @@ contains
     ! Number of particles
     integer, intent(in) :: n_particles
     ! Position of the particles
-    class(ParticlesType), intent(out) :: particles
+    class(VectorType), intent(out) :: particles
 
     call init_random_rectangle(left, right, left, right, n_particles, particles)
   end subroutine init_random_square

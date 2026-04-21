@@ -47,10 +47,10 @@ contains
         deallocate(this%z)
       end if
 
-    allocate(this%x(n))
-    allocate(this%y(n))
-    allocate(this%z(n))
-  end if
+      allocate(this%x(n))
+      allocate(this%y(n))
+      allocate(this%z(n))
+    end if
 
     this%x = 0.0_wp
     this%y = 0.0_wp
