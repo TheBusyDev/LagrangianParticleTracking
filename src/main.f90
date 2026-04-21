@@ -1,3 +1,6 @@
+! Suppress compiler warnings about unused variables
+#define MAYBE_UNUSED(x) associate(x => x); end associate
+
 program main
   use Numbers
   use VectorModule, only: VectorType
@@ -45,6 +48,14 @@ program main
   type(VectorType) :: particles
   ! Explicit RK method
   type(ExplicitRungeKuttaType) :: explicit_rk
+
+  ! Suppress compiler warnings about unused variables
+  MAYBE_UNUSED(FIRST_ORDER_FORWARD_EULER)
+  MAYBE_UNUSED(SECOND_ORDER_MIDPOINT)
+  MAYBE_UNUSED(SECOND_ORDER_HEUN)
+  MAYBE_UNUSED(THIRD_ORDER_KUTTA)
+  MAYBE_UNUSED(THIRD_ORDER_HEUN)
+  MAYBE_UNUSED(FOURTH_ORDER)
 
   print '(A)', "Initializing the LPT solver..."
 
