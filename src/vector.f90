@@ -87,7 +87,7 @@ contains
     ! The time step, in string format
     character(6) :: timestep_str
     ! File unit
-    integer :: u_file
+    integer :: fu
     ! Counter
     integer i
 
@@ -95,29 +95,29 @@ contains
     if (present(timestep)) then
       write(timestep_str, '(I6.6)') timestep
       open( &
-        newunit=u_file, &
+        newunit=fu, &
         file=filename//"_"//timestep_str//".csv", &
         status="replace", &
         action="write")
     else
       open( &
-        newunit=u_file, &
+        newunit=fu, &
         file=filename//".csv", &
         status="replace", &
         action="write")
     end if
 
     ! Write headers
-    write(u_file, '(A)') "# "//labels(1)//", "//labels(2)//", "//labels(3)
+    write(fu, '(A)') "# "//labels(1)//", "//labels(2)//", "//labels(3)
 
     ! Write points and array
     do i = 1, this%n
-      write(u_file, '(ES0.6, A, ES0.6, A, ES0.6)') &
+      write(fu, '(ES0.6, A, ES0.6, A, ES0.6)') &
         this%x(i), ", ", this%y(i), ", ", this%z(i)
     end do
 
     ! Close the file
-    close(u_file)
+    close(fu)
   end subroutine write_vector_to_csv
 
 end module VectorModule
