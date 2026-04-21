@@ -3,7 +3,7 @@ module NamelistModule
   use RungeKuttaModule, only: FIRST_ORDER_FORWARD_EULER, &
                               SECOND_ORDER_MIDPOINT, SECOND_ORDER_HEUN, &
                               THIRD_ORDER_KUTTA, THIRD_ORDER_HEUN, &
-                              FOURTH_ORDER
+                              FOURTH_ORDER_RK
 
   implicit none
 
@@ -72,8 +72,8 @@ contains
     case ("THIRD_ORDER_HEUN")
       scheme = THIRD_ORDER_HEUN
 
-    case ("FOURTH_ORDER")
-      scheme = FOURTH_ORDER
+    case ("FOURTH_ORDER_RK")
+      scheme = FOURTH_ORDER_RK
 
     case default
       print *, "ERROR: Time-stepping method '"//scheme_str//"' not implemented."

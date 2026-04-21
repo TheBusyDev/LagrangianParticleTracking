@@ -4,13 +4,15 @@ module RungeKuttaModule
 
   implicit none
 
+  ! Enumerator to select the explicit Runge-Kutta scheme
+  ! Reference: https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods
   enum, bind(c)
     enumerator :: FIRST_ORDER_FORWARD_EULER
     enumerator :: SECOND_ORDER_MIDPOINT
     enumerator :: SECOND_ORDER_HEUN
     enumerator :: THIRD_ORDER_KUTTA
     enumerator :: THIRD_ORDER_HEUN
-    enumerator :: FOURTH_ORDER
+    enumerator :: FOURTH_ORDER_RK
   end enum
 
 
@@ -102,7 +104,7 @@ contains
       this%b = [0.25_wp, 0.0_wp, 0.75_wp]
       this%c = [0.0_wp, 1.0_wp / 3, 2.0_wp / 3]
 
-    case (FOURTH_ORDER)
+    case (FOURTH_ORDER_RK)
       call this%init_butcher(n_stages=4)
       this%a = reshape([0.0_wp, 0.0_wp, 0.0_wp, 0.0_wp, &
                         0.5_wp, 0.0_wp, 0.0_wp, 0.0_wp, &

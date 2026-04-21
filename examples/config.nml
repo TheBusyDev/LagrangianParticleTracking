@@ -25,7 +25,7 @@
   delta_time = 0.1
 
   ! The time-stepping scheme
-  scheme_str = "FOURTH_ORDER"
+  scheme_str = "FOURTH_ORDER_RK"
 
   ! The output directory
   output_dir = "output"
