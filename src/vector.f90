@@ -20,7 +20,6 @@ module VectorModule
     procedure :: write_to_csv => write_vector_to_csv
   end type VectorType
 
-
   private :: init_vector, multiply_add_vector, write_vector_to_csv
 
 contains
@@ -32,31 +31,30 @@ contains
     ! Number of vectors
     integer, intent(in) :: n
 
-    if (this%n .ne. n) then
+    if (this%n /= n) then
       this%n = n
 
       if (allocated(this%x)) then
-        deallocate(this%x)
+        deallocate (this%x)
       end if
 
       if (allocated(this%y)) then
-        deallocate(this%y)
+        deallocate (this%y)
       end if
 
       if (allocated(this%z)) then
-        deallocate(this%z)
+        deallocate (this%z)
       end if
 
-      allocate(this%x(n))
-      allocate(this%y(n))
-      allocate(this%z(n))
+      allocate (this%x(n))
+      allocate (this%y(n))
+      allocate (this%z(n))
     end if
 
     this%x = 0.0_wp
     this%y = 0.0_wp
     this%z = 0.0_wp
   end subroutine init_vector
-
 
   ! Multiply-add operation, i.e. this = this + s * v
   ! with s being a scalar and v another vector.
@@ -73,7 +71,6 @@ contains
     this%z = this%z + s * v%z
   end subroutine multiply_add_vector
 
-
   ! Write 3D vector to .csv file
   subroutine write_vector_to_csv(this, output_dir, filename, labels, timestep)
     ! The vector
@@ -83,7 +80,7 @@ contains
     ! The filename, without .csv extension
     character(*), intent(in) :: filename
     ! The labels used to write to .csv file
-    character(*), intent(in):: labels(3)
+    character(*), intent(in) :: labels(3)
     ! The time step (optional)
     integer, optional, intent(in) :: timestep
     ! The filepath
@@ -99,24 +96,24 @@ contains
     filepath = trim(output_dir)//"/"//trim(filename)
 
     if (present(timestep)) then
-      write(timestep_str, '(I6.6)') timestep
+      write (timestep_str, '(I6.6)') timestep
       filepath = filepath//"_"//timestep_str
     end if
 
     filepath = filepath//".csv"
-    open(newunit=fu, file=filepath, status="replace", action="write")
+    open (newunit=fu, file=filepath, status="replace", action="write")
 
     ! Write headers
-    write(fu, '(A)') "# "//labels(1)//", "//labels(2)//", "//labels(3)
+    write (fu, '(A)') "# "//labels(1)//", "//labels(2)//", "//labels(3)
 
     ! Write points and array
     do i = 1, this%n
-      write(fu, '(ES0.6, A, ES0.6, A, ES0.6)') &
+      write (fu, '(ES0.6, A, ES0.6, A, ES0.6)') &
         this%x(i), ", ", this%y(i), ", ", this%z(i)
     end do
 
     ! Close the file
-    close(fu)
+    close (fu)
   end subroutine write_vector_to_csv
 
 end module VectorModule

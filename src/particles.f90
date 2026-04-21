@@ -34,7 +34,6 @@ contains
     particles%z = 0.0_wp
   end subroutine init_random_circle
 
-
   ! Initialize position of the particles randomly on a 2D rectangular domain
   subroutine init_random_rectangle(left, right, bottom, top, n_particles, particles)
     ! Left, right, bottom and top endpoints
@@ -57,7 +56,6 @@ contains
     particles%y = bottom + (top - bottom) * particles%y ! Rescale along y
     particles%z = 0.0_wp
   end subroutine init_random_rectangle
-
 
   ! Initialize position of the particles randomly on a 2D square domain
   subroutine init_random_square(left, right, n_particles, particles)

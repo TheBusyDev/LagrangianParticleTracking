@@ -24,7 +24,7 @@ contains
     call mesh%init(n_points * n_points)
 
     ! Define coordinate array
-    coord = [(left + i * (right - left) / (n_points - 1), i = 0, n_points - 1)]
+    coord = [(left + i * (right - left) / (n_points - 1), i=0, n_points - 1)]
 
     ! Initialize array of points (exploit column-major ordering)
     do j = 1, n_points

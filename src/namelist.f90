@@ -48,12 +48,12 @@ contains
 
     ! Declare namelist
     namelist /config/ left, right, radius, n_points, n_particles, &
-                      initial_time, final_time, delta_time, scheme_str, output_dir
+      initial_time, final_time, delta_time, scheme_str, output_dir
 
     ! Parse from file
-    open(newunit=fu, file=trim(filename), status='old')
-    read(fu, nml=config)
-    close(fu)
+    open (newunit=fu, file=trim(filename), status='old')
+    read (fu, nml=config)
+    close (fu)
 
     ! Select the time-stepping scheme
     select case (scheme_str)

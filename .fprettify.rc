@@ -1,0 +1,28 @@
+# Replace Fortran-style relational operators with C-style
+# to make our code more readable for non-Fortran programmers
+# for example '.lt.' to '<'
+enable-replacements = true
+c-relations = true
+
+# White space settings
+indent = 2
+line-length = 130
+strict-indent = true
+strip-comments = true
+whitespace = 4
+whitespace-assignment = true
+whitespace-relational = true
+whitespace-logical = true
+whitespace-plusminus = true
+whitespace-multdiv = true
+whitespace-comma = true
+whitespace-intrinsics = true
+whitespace-print = true
+whitespace-type = false
+
+# Control whitespace around '::' declarations
+whitespace-decl = true
+enable-decl = true
+
+# Don't indent pre-processor statements
+disable-fypp = true

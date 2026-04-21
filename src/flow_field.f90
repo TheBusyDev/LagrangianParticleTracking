@@ -16,7 +16,7 @@ contains
     class(VectorType), intent(out) :: flow_field
 
     ! Silence compiler warnings
-    associate(dummy => time)
+    associate (dummy => time)
     end associate
 
     ! Initialize flow field

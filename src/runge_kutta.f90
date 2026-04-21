@@ -15,7 +15,6 @@ module RungeKuttaModule
     enumerator :: FOURTH_ORDER_RK
   end enum
 
-
   ! Explicit Runge-Kutta implementation
   type ExplicitRungeKuttaType
     ! The number of stages
@@ -38,7 +37,6 @@ module RungeKuttaModule
     procedure :: update => update_rk
   end type ExplicitRungeKuttaType
 
-
   ! Forcing term function for Runge-Kutta schemes
   abstract interface
     subroutine f_template(t, x, f)
@@ -51,7 +49,6 @@ module RungeKuttaModule
       class(VectorType), intent(out) :: f
     end subroutine f_template
   end interface
-
 
   private :: init_rk, init_butcher_rk, update_rk
 
@@ -123,13 +120,12 @@ contains
 
     ! Initialize variables used for the intermediate evaluations
     call this%x_tmp%init(n)
-    allocate(this%k(this%n_stages))
+    allocate (this%k(this%n_stages))
 
     do i = 1, this%n_stages
       call this%k(i)%init(n)
     end do
   end subroutine init_rk
-
 
   ! Allocate Butcher tableau coefficients
   subroutine init_butcher_rk(this, n_stages)
@@ -140,15 +136,14 @@ contains
 
     this%n_stages = n_stages
 
-    allocate(this%a(n_stages, n_stages))
-    allocate(this%b(n_stages))
-    allocate(this%c(n_stages))
+    allocate (this%a(n_stages, n_stages))
+    allocate (this%b(n_stages))
+    allocate (this%c(n_stages))
 
     this%a = 0.0_wp
     this%b = 0.0_wp
     this%c = 0.0_wp
   end subroutine init_butcher_rk
-
 
   ! Update rule for explicit RK schemes
   subroutine update_rk(this, x, t_old, delta_t, f_function)
