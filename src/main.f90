@@ -1,42 +1,36 @@
-! Suppress compiler warnings about unused variables
-#define MAYBE_UNUSED(x) associate(x => x); end associate
-
 program main
   use Numbers
+  use NamelistModule, only: parse_parameters
   use VectorModule, only: VectorType
   use MeshModule, only: init_square_mesh
   use FlowFieldModule, only: vortex
-  use ParticlesModule, only: init_random_circle, init_random_square
-  use RungeKuttaModule, only: ExplicitRungeKuttaType, f_template, &
-                              FIRST_ORDER_FORWARD_EULER, &
-                              SECOND_ORDER_MIDPOINT, SECOND_ORDER_HEUN, &
-                              THIRD_ORDER_KUTTA, THIRD_ORDER_HEUN, &
-                              FOURTH_ORDER
+  use ParticlesModule, only: init_random_circle
+  use RungeKuttaModule, only: ExplicitRungeKuttaType, f_template
 
   implicit none
 
   ! Left and right endpoints of the square domain
-  real(wp), parameter :: left = -1.0_wp, right = 1.0_wp
+  real(wp) :: left, right
   ! Radius used to initialize the particles on a circular domain
-  real(wp), parameter :: radius = (right - left) / 2.0_wp
+  real(wp) :: radius
   ! Number of points for each side of the square domain
-  integer, parameter :: n_points = 10
+  integer :: n_points
   ! Number of particles
-  integer, parameter :: n_particles = 1000
+  integer :: n_particles
   ! The initial time
-  real(wp), parameter :: initial_time = 0.0_wp
+  real(wp) :: initial_time
   ! The final time
-  real(wp), parameter :: final_time = 10_wp
+  real(wp) :: final_time
   ! The time step
-  real(wp), parameter :: delta_time = 0.1_wp
+  real(wp) :: delta_time
   ! The time-stepping scheme
-  integer, parameter :: scheme = FOURTH_ORDER
+  integer :: scheme
   ! The current time
-  real(wp) :: time = initial_time
+  real(wp) :: time
   ! The old time
-  real(wp) :: old_time = initial_time
+  real(wp) :: old_time
   ! The number of the time step
-  integer :: timestep = 0
+  integer :: timestep
   ! Flow field function
   procedure(f_template), pointer :: flow_field_fun => vortex
 
@@ -49,19 +43,28 @@ program main
   ! Explicit RK method
   type(ExplicitRungeKuttaType) :: explicit_rk
 
-  ! Suppress compiler warnings about unused variables
-  MAYBE_UNUSED(FIRST_ORDER_FORWARD_EULER)
-  MAYBE_UNUSED(SECOND_ORDER_MIDPOINT)
-  MAYBE_UNUSED(SECOND_ORDER_HEUN)
-  MAYBE_UNUSED(THIRD_ORDER_KUTTA)
-  MAYBE_UNUSED(THIRD_ORDER_HEUN)
-  MAYBE_UNUSED(FOURTH_ORDER)
+  ! Read the variables from the namelist file
+  print '(A)', "Parsing the variables from config.nml" ! TODO: pass from command line
+  call parse_parameters("config.nml", &
+                        left, &
+                        right, &
+                        radius, &
+                        n_points, &
+                        n_particles, &
+                        initial_time, &
+                        final_time, &
+                        delta_time, &
+                        scheme)
 
+  time = initial_time
+  old_time = initial_time
+  timestep = 0
+
+  ! Initialize LPT solver
   print '(A)', "Initializing the LPT solver..."
 
   ! Initialize mesh and position of particles
   call init_square_mesh(left, right, n_points, mesh)
-  ! call init_random_square(left, right, n_particles, particles)
   call init_random_circle(radius, n_particles, particles)
 
   ! Initialize RK scheme
