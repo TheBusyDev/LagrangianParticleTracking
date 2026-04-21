@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 
+OUTPUT_DIR = "output"
+DELTA_TIME = 0.1 # Physical timestep
+
+
 def load_timesteps(basename: str) -> list[np.ndarray]:
   '''
   Load data from basename_XXXXXX.csv files.
@@ -24,11 +28,11 @@ def load_timesteps(basename: str) -> list[np.ndarray]:
 # MAIN PROGRAM.
 if __name__ == "__main__":
   # Load mesh.
-  mesh = np.loadtxt("mesh.csv", delimiter=",")
+  mesh = np.loadtxt(f"{OUTPUT_DIR}/mesh.csv", delimiter=",")
 
   # Load flow field and particles.
-  flow_fields = load_timesteps("flow_field")
-  particles = load_timesteps("particles")
+  flow_fields = load_timesteps(f"{OUTPUT_DIR}/flow_field")
+  particles = load_timesteps(f"{OUTPUT_DIR}/particles")
 
   n_timesteps = len(flow_fields)
   assert len(particles) == n_timesteps
@@ -44,25 +48,28 @@ if __name__ == "__main__":
                           flow_fields[0][:, 1],
                           np.linalg.norm(flow_fields[0], axis=1),
                           cmap="jet")
-  fig.colorbar(quiver_plot)
+  fig.colorbar(quiver_plot, label="Flow field magnitude")
 
   scatter_plot = ax.scatter(particles[0][:, 0],
-                              particles[0][:, 1],
-                              c="black")
-
+                            particles[0][:, 1],
+                            c="black",
+                            s=10)
   ax.set_aspect('equal')
   fig.tight_layout()
 
   # Plot one single frame.
   def plot_frame(frame: int) -> None:
-    i = frame % n_timesteps
+    quiver_plot.set_UVC(flow_fields[frame][:, 0],
+                        flow_fields[frame][:, 1],
+                        np.linalg.norm(flow_fields[frame], axis=1))
 
-    quiver_plot.set_UVC(flow_fields[i][:, 0],
-                        flow_fields[i][:, 1],
-                        np.linalg.norm(flow_fields[i], axis=1))
+    scatter_plot.set_offsets(particles[frame][:, :2])
 
-    scatter_plot.set_offsets(particles[i][:, :2])
-
-  animation = FuncAnimation(fig, plot_frame)
+  animation = FuncAnimation(fig=fig,
+                            func=plot_frame,
+                            frames=n_timesteps,
+                            interval=DELTA_TIME*1000)
+  animation.save("animation.mp4", dpi=200)
   plt.show()
+
   exit(0)
