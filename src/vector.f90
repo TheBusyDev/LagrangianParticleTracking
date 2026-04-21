@@ -75,16 +75,20 @@ contains
 
 
   ! Write 3D vector to .csv file
-  subroutine write_vector_to_csv(this, filename, labels, timestep)
+  subroutine write_vector_to_csv(this, output_dir, filename, labels, timestep)
     ! The vector
     class(VectorType), intent(in) :: this
+    ! The output directory
+    character(*) :: output_dir
     ! The filename, without .csv extension
     character(*), intent(in) :: filename
     ! The labels used to write to .csv file
     character(*), intent(in):: labels(3)
     ! The time step (optional)
     integer, optional, intent(in) :: timestep
-    ! The time step, in string format
+    ! The filepath
+    character(:), allocatable :: filepath
+    ! The time step (string version)
     character(6) :: timestep_str
     ! File unit
     integer :: fu
@@ -92,20 +96,15 @@ contains
     integer i
 
     ! Open the file (optionally, append time step to the filename)
+    filepath = trim(output_dir)//"/"//trim(filename)
+
     if (present(timestep)) then
       write(timestep_str, '(I6.6)') timestep
-      open( &
-        newunit=fu, &
-        file=filename//"_"//timestep_str//".csv", &
-        status="replace", &
-        action="write")
-    else
-      open( &
-        newunit=fu, &
-        file=filename//".csv", &
-        status="replace", &
-        action="write")
+      filepath = filepath//"_"//timestep_str
     end if
+
+    filepath = filepath//".csv"
+    open(newunit=fu, file=filepath, status="replace", action="write")
 
     ! Write headers
     write(fu, '(A)') "# "//labels(1)//", "//labels(2)//", "//labels(3)

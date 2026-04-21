@@ -31,6 +31,8 @@ add_custom_target(
   COMMAND ./${EXEC} ./examples/config.nml
   WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 
+add_dependencies(run ${EXEC})
+
 # Add plot target
 add_custom_target(
   plot

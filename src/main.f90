@@ -25,6 +25,9 @@ program main
   real(wp) :: delta_time
   ! The time-stepping scheme
   integer :: scheme
+  ! The output directory
+  character(256) :: output_dir
+
   ! The current time
   real(wp) :: time
   ! The old time
@@ -69,11 +72,16 @@ program main
                         initial_time, &
                         final_time, &
                         delta_time, &
-                        scheme)
+                        scheme, &
+                        output_dir)
 
+  ! Initialize time variables
   time = initial_time
   old_time = initial_time
   timestep = 0
+
+  ! Create output directory
+  call execute_command_line("mkdir -p "//trim(output_dir))
 
   ! Initialize LPT solver
   print '(A)', "Initializing the LPT solver..."
@@ -89,9 +97,9 @@ program main
   call flow_field_fun(time, mesh, flow_field)
 
   ! Write mesh points, flow field and particles
-  call mesh%write_to_csv("mesh", ["x", "y", "z"])
-  call flow_field%write_to_csv("flow_field", ["vx", "vy", "vz"], timestep)
-  call particles%write_to_csv("particles", ["x", "y", "z"], timestep)
+  call mesh%write_to_csv(output_dir, "mesh", ["x", "y", "z"])
+  call flow_field%write_to_csv(output_dir, "flow_field", ["vx", "vy", "vz"], timestep)
+  call particles%write_to_csv(output_dir, "particles", ["x", "y", "z"], timestep)
 
   ! Time loop
   do while (time < (final_time - 0.5_wp * delta_time))
@@ -108,8 +116,8 @@ program main
     call flow_field_fun(time, mesh, flow_field)
 
     ! Write results
-    call flow_field%write_to_csv("flow_field", ["vx", "vy", "vz"], timestep)
-    call particles%write_to_csv("particles", ["x", "y", "z"], timestep)
+    call flow_field%write_to_csv(output_dir, "flow_field", ["vx", "vy", "vz"], timestep)
+    call particles%write_to_csv(output_dir, "particles", ["x", "y", "z"], timestep)
   end do
 
 end program main

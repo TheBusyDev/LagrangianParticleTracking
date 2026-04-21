@@ -19,7 +19,8 @@ contains
                               initial_time, &
                               final_time, &
                               delta_time, &
-                              scheme)
+                              scheme, &
+                              output_dir)
     ! The filename
     character(*), intent(in) :: filename
     ! Left and right endpoints of the square domain
@@ -42,13 +43,15 @@ contains
     character(64) :: scheme_str
     ! File unit
     integer :: fu
+    ! The output directory
+    character(*) :: output_dir
 
     ! Declare namelist
     namelist /config/ left, right, radius, n_points, n_particles, &
-                      initial_time, final_time, delta_time, scheme_str
+                      initial_time, final_time, delta_time, scheme_str, output_dir
 
     ! Parse from file
-    open(newunit=fu, file=filename, status='old')
+    open(newunit=fu, file=trim(filename), status='old')
     read(fu, nml=config)
     close(fu)
 

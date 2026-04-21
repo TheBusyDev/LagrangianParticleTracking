@@ -26,4 +26,7 @@
 
   ! The time-stepping scheme
   scheme_str = "FOURTH_ORDER"
+
+  ! The output directory
+  output_dir = "output"
 /
