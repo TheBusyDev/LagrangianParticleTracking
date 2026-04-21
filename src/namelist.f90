@@ -39,12 +39,12 @@ contains
     real(wp), intent(out) :: delta_time
     ! The time-stepping scheme
     integer, intent(out) :: scheme
+    ! The output directory
+    character(*), intent(out) :: output_dir
     ! The time-stepping scheme (string version)
     character(64) :: scheme_str
     ! File unit
     integer :: fu
-    ! The output directory
-    character(*) :: output_dir
 
     ! Declare namelist
     namelist /config/ left, right, radius, n_points, n_particles, &
