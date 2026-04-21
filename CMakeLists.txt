@@ -13,10 +13,26 @@ set(CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules")
 file(GLOB_RECURSE SOURCES "src/*.f90")
 
 # Create the executable
-add_executable(main ${SOURCES})
+set(EXEC "main")
+add_executable(${EXEC} ${SOURCES})
+
+# Create links
+foreach(folder "examples" "scripts")
+  file(
+    CREATE_LINK
+    "${CMAKE_SOURCE_DIR}/${folder}"
+    "${CMAKE_CURRENT_BINARY_DIR}/${folder}"
+    SYMBOLIC)
+endforeach()
+
+# Add run target
+add_custom_target(
+  run
+  COMMAND ./${EXEC} ./examples/config.nml
+  WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 
 # Add plot target
 add_custom_target(
   plot
-  COMMAND python3 "${CMAKE_SOURCE_DIR}/scripts/plot.py"
+  COMMAND python3 "./scripts/plot.py"
   WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
