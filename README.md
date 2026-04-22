@@ -60,7 +60,7 @@ make plot # equivalent to: python ./scripts/plot.py
 ## Code base 🧐
 
 The code base is composed of the following modules:
-- [`VectorType`](src/vector.f90) defines a class `VectorType`, used to store
+- [`VectorModule`](src/vector.f90) defines a class `VectorType`, used to store
   an array of 3D vectors and save them into `.csv` files;
 - [`RungeKuttaModule`](src/runge_kutta.f90) implements the explicit Runge-Kutta
   method, with some useful enumerators to select the scheme (as listed

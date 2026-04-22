@@ -76,7 +76,7 @@ contains
     ! The vector
     class(VectorType), intent(in) :: this
     ! The output directory
-    character(*) :: output_dir
+    character(*), intent(in) :: output_dir
     ! The filename, without .csv extension
     character(*), intent(in) :: filename
     ! The labels used to write to .csv file
