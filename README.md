@@ -76,7 +76,7 @@ The code base is composed of the following modules:
 - [`Numbers`](src/numbers.f90) defines the working precision and other numeric
   constants.
 
-## Bonus: format your code automatically
+## Bonus: format your code automatically (and save some time)
 
 The code can be formatted automatically by using
 [`fprettify`](https://github.com/fortran-lang/fprettify), which can be installed
