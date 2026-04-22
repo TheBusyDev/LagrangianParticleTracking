@@ -26,7 +26,7 @@ These commands produce an executable `main`.
 ## How to run 🚀
 
 After building the project, the executable must be called by passing the
-*namelist* file to declare relevant parameter, e.g.:
+*namelist* file to declare relevant parameters, e.g.:
 ```
 ./main ./examples/config.nml
 ```
