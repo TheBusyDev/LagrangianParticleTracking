@@ -69,7 +69,7 @@ if __name__ == "__main__":
                             func=plot_frame,
                             frames=n_timesteps,
                             interval=DELTA_TIME*1000)
-  animation.save("animation.mp4", dpi=200)
+  animation.save("animation.gif", dpi=200)
   plt.show()
 
   exit(0)
