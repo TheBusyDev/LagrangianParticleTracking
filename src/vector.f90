@@ -108,7 +108,7 @@ contains
 
     ! Write points and array
     do i = 1, this%n
-      write (fu, '(ES0.6, A, ES0.6, A, ES0.6)') &
+      write (fu, '(ES14.6, A, ES14.6, A, ES14.6)') &
         this%x(i), ", ", this%y(i), ", ", this%z(i)
     end do
 

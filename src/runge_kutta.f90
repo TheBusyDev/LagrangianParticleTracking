@@ -112,7 +112,7 @@ contains
 
     case default
       print *, "ERROR: Time-stepping method not implemented."
-      call exit(1)
+      stop 1
     end select
 
     ! Transpose a for better performance with column-major ordering

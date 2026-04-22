@@ -77,7 +77,7 @@ contains
 
     case default
       print *, "ERROR: Time-stepping method '"//scheme_str//"' not implemented."
-      call exit(1)
+      stop 1
     end select
   end subroutine parse_parameters
 

@@ -56,7 +56,7 @@ program main
   if (n_args == 0) then
     print '(A)', "ERROR: you must specify the namelist filename in the arguments, e.g.:"
     print '(A)', "       >>> ./main config.nml"
-    call exit(1)
+    stop 1
   end if
 
   call get_command_argument(number=1, value=nml_filename)

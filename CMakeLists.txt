@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 project(LPT Fortran)
 
-# Set the Fortran Standard
-set(CMAKE_Fortran_STANDARD 2003)
-
 # Define flags for Debug and Release modes
-set(CMAKE_Fortran_FLAGS_DEBUG   "-cpp -g -Wall -Wextra -fcheck=all -fbounds-check")
-set(CMAKE_Fortran_FLAGS_RELEASE "-cpp -O3 -march=native -flto -ffast-math")
+set(CMAKE_Fortran_FLAGS_DEBUG   "-cpp -std=f2008 -g -Wall -Wextra -fcheck=all -fbounds-check")
+set(CMAKE_Fortran_FLAGS_RELEASE "-cpp -std=f2008 -O3 -march=native -flto -ffast-math")
+
+# Define the module directory
 set(CMAKE_Fortran_MODULE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/modules")
 
 # Find all source files
