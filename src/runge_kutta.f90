@@ -58,7 +58,7 @@ contains
   subroutine init_rk(this, scheme, n)
     ! The RK class
     class(ExplicitRungeKuttaType), intent(out) :: this
-    ! The selected RK scheme
+    ! The RK scheme, selected from the enumerators.
     integer, intent(in) :: scheme
     ! The problem size, used to initialize the class members
     integer, intent(in) :: n
